@@ -1,12 +1,15 @@
+import { inject, injectable } from "inversify";
 import { UsuarioSchema } from "../../3infra/usuario.schema";
+import { AtualizarUsuarioDTO, CriarUsuarioDTO } from "../dtos/usuario.dto";
 import NotFountException from "../exceptions/not-fount.exception";
-import UsuarioRepositorioInterface from "../interfaces/usuario-interface.repositorio";
+import UsuarioRepositorioInterface from "../interfaces/repositorios/usuario-repositorio.interface";
+import UsuarioServiceInterface from "../interfaces/servicos/usuario-servico.interface";
+import "reflect-metadata";
 
-
-
-class UsuarioService {
+@injectable()
+class UsuarioService implements UsuarioServiceInterface {
     private readonly usuarioRepositorio: UsuarioRepositorioInterface;
-    constructor(usuarioRepositorio: UsuarioRepositorioInterface) {
+    constructor(@inject('UsuarioRepositorio') usuarioRepositorio: UsuarioRepositorioInterface) {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
@@ -20,10 +23,10 @@ class UsuarioService {
     public buscarTodos (): UsuarioSchema[]{
         return this.usuarioRepositorio.buscaTodos();
     }
-    public criar (usuario: UsuarioSchema): void {
+    public criar (usuario: CriarUsuarioDTO): void {
         this.usuarioRepositorio.criar(usuario);
     }
-    public atualizar (id:number, usuario: UsuarioSchema): void {
+    public atualizar (id:number, usuario: AtualizarUsuarioDTO): void {
         this.usuarioRepositorio.atualizar(id, usuario);
     }
     public deletar (id:number): void {

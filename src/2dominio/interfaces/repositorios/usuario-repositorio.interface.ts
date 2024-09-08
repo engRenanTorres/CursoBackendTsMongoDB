@@ -1,6 +1,5 @@
-import { UsuarioSchema } from "../../3infra/usuario.schema";
-import { AtualizarUsuarioDTO, CriarUsuarioDTO } from "../dtos/usuario.dto";
-
+import { UsuarioSchema } from "../../../3infra/usuario.schema";
+import { AtualizarUsuarioDTO, CriarUsuarioDTO } from "../../dtos/usuario.dto";
 
 interface UsuarioRepositorioInterface {
 

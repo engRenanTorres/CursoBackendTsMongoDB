@@ -1,18 +1,17 @@
 import { Router, Request, Response } from 'express';
-import UsuarioRepositorio from '../../3infra/repositorios/usuario.repositorio';
 import { AtualizarUsuarioDTO, CriarUsuarioDTO } from '../../2dominio/dtos/usuario.dto';
 import { body, param, validationResult } from 'express-validator';
-import UsuarioRepositorioInterface from '../../2dominio/interfaces/usuario-interface.repositorio';
 import { inject, injectable } from 'inversify';
+import UsuarioServiceInterface from '../../2dominio/interfaces/servicos/usuario-servico.interface';
 
 @injectable()
 class UsuarioController {
-  private readonly usuarioRepositorio: UsuarioRepositorioInterface;
+  private readonly usuarioService: UsuarioServiceInterface;
   public readonly router: Router = Router();
 
-  constructor (@inject('UsuarioRepositorio') usuarioRepositorio: UsuarioRepositorioInterface,
+  constructor (@inject('UsuarioService') usuarioRepositorio: UsuarioServiceInterface,
   ) {
-    this.usuarioRepositorio = usuarioRepositorio;
+    this.usuarioService = usuarioRepositorio;
     this.routes();
   }
 
@@ -66,7 +65,7 @@ class UsuarioController {
      *         description: Erro Interno
      */
   buscarTodos (req: Request, res: Response) {
-    const usarios = this.usuarioRepositorio.buscaTodos();
+    const usarios = this.usuarioService.buscarTodos();
     res.json(usarios);
   }
 
@@ -78,7 +77,7 @@ class UsuarioController {
     }
 
     const id = req.params.id ?? 1;
-    const usuario = this.usuarioRepositorio.buscaPorId(+id);
+    const usuario = this.usuarioService.buscarPorId(+id);
     res.json(usuario);
   }
 
@@ -90,8 +89,8 @@ class UsuarioController {
     }
 
     const dadosUsuario: CriarUsuarioDTO = req.body;
-    this.usuarioRepositorio.criar(dadosUsuario);
-    const usuarios = this.usuarioRepositorio.buscaTodos();
+    this.usuarioService.criar(dadosUsuario);
+    const usuarios = this.usuarioService.buscarTodos();
     res.status(201).json(usuarios);
   }
 
@@ -99,13 +98,13 @@ class UsuarioController {
     const id = req.params.id;
     const dadosNovos: AtualizarUsuarioDTO = req.body;
 
-    this.usuarioRepositorio.atualizar(+id, dadosNovos);
+    this.usuarioService.atualizar(+id, dadosNovos);
     res.json('Usuario atualizado com sucesso!');
   }
 
   deletar (req: Request, res: Response) {
     const id = req.params.id;
-    this.usuarioRepositorio.deletar(+id);
+    this.usuarioService.deletar(+id);
     res.json('Usuario deletado com sucesso!');
   }
 }
