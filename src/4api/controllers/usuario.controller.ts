@@ -9,9 +9,9 @@ class UsuarioController {
   private readonly usuarioService: UsuarioServiceInterface;
   public readonly router: Router = Router();
 
-  constructor (@inject('UsuarioService') usuarioRepositorio: UsuarioServiceInterface,
+  constructor (@inject('UsuarioService') usuarioService: UsuarioServiceInterface,
   ) {
-    this.usuarioService = usuarioRepositorio;
+    this.usuarioService = usuarioService;
     this.routes();
   }
 
